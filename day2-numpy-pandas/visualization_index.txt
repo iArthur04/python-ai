@@ -1,0 +1,11 @@
+GENERATED STUDENT VISUALIZATIONS
+=============================================
+1. 01_exam_score_histogram.png
+2. 02_study_hours_scatter.png
+3. 03_course_horizontal_bar.png
+4. 04_experience_boxplot.png
+5. 05_performance_pie.png
+6. 06_study_band_line.png
+7. 07_attendance_stacked_bar.png
+8. 08_correlation_heatmap.png
+9. 09_projects_lollipop.png

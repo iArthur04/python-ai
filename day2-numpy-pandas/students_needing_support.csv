@@ -1,0 +1,11 @@
+Student_ID,Hours_Studied,Attendance,Previous_GPA,Sleep_Hours,Coding_Experience,Course_Type,Projects_Completed,Exam_Score,Expected_Score,Performance_Gap,Pass_Status,Performance_Level,Sleep_Group,Attendance_Group,Project_Group
+23,11.7,67.0,3.32,7.2,Beginner,AI/ML,5,73.4,90.7,-17.3,Pass,Satisfactory,7 to <8,Below 70%,4-7
+31,9.2,79.0,3.72,7.4,Advanced,Web Dev,6,75.2,93.5,-18.3,Pass,Satisfactory,7 to <8,70-79%,4-7
+139,9.6,96.5,2.51,6.0,Advanced,AI/ML,2,73.7,86.5,-12.8,Pass,Satisfactory,6 to <7,90%+,0-3
+143,11.3,75.8,2.88,8.1,Beginner,Data Science,4,76.1,88.0,-11.9,Pass,Satisfactory,8+,70-79%,4-7
+174,11.3,87.9,3.35,6.5,Intermediate,Cloud,3,73.0,95.7,-22.7,Pass,Satisfactory,6 to <7,80-89%,0-3
+226,11.2,72.9,2.64,6.3,Intermediate,Data Science,8,77.5,92.3,-14.8,Pass,Satisfactory,6 to <7,70-79%,8-11
+321,11.1,71.2,2.0,7.3,Advanced,Web Dev,5,79.2,89.8,-10.6,Pass,Satisfactory,7 to <8,70-79%,4-7
+357,9.4,96.3,3.33,6.5,Beginner,Data Science,7,78.7,90.1,-11.4,Pass,Satisfactory,6 to <7,90%+,4-7
+414,10.9,78.9,2.06,6.5,Intermediate,Web Dev,7,66.4,89.4,-23.0,Pass,Satisfactory,6 to <7,70-79%,4-7
+434,10.2,91.9,3.68,8.1,Intermediate,Cloud,7,83.8,95.5,-11.7,Pass,High Performer,8+,90%+,4-7

@@ -1,0 +1,22 @@
+======================================================================
+EXTENDED STUDENT PERFORMANCE ANALYSIS REPORT
+======================================================================
+
+Total students: 500
+Average exam score: 74.0%
+Overall pass rate: 79.0%
+Best-performing course: Web Dev (76.3%)
+
+THREE ADDITIONAL INSIGHTS
+----------------------------------------------------------------------
+1. Attendance: 90%+ had the highest pass rate (85.1%).
+2. Projects: students completing 12-14 projects had the highest average score (80.7%).
+3. Targeted support: 10 high-effort students studied at least 9.2 hours but scored at least 10 points below their expected score.
+
+CORRELATIONS WITH EXAM SCORE
+----------------------------------------------------------------------
+Hours_Studied: 0.801
+Projects_Completed: 0.170
+Previous_GPA: 0.147
+Attendance: 0.076
+Sleep_Hours: 0.073

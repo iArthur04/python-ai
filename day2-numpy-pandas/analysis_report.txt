@@ -1,0 +1,13 @@
+============================================================
+STUDENT PERFORMANCE ANALYSIS REPORT
+============================================================
+
+Total Students: 100
+Average Exam Score: 67.7%
+
+Top Performing Courses:
+  Cloud: 71.0%
+  AI/ML: 69.4%
+
+Key Findings:
+  ✅ Strong positive correlation between hours studied and exam scores
