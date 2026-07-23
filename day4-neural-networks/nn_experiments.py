@@ -156,32 +156,65 @@ experiments = {
         'activation': 'relu',
         'dropout': 0.5,
         'optimizer': 'adam',
-        'learning_rate': '0.01',
+        'learning_rate': 0.01,
         'batch_size': 128,
         'epochs': 10
     },
 
     # Experiment 12: My Design, My Architecture.
-        'my_custom': {
+    'my_custom1': {
         'layers': [256, 128, 64],
-        'activation': 'tahn',
+        'activation': 'tanh',
         'dropout': 0.3,
         'optimizer': 'sgd',
-        'learning_rate': '0.001',
+        'learning_rate': 0.001,
         'batch_size': 64,
         'epochs': 10
         },
 
-        # Experiment 13: My Design, My Architecture.
-            'my_custom': {
-            'layers': [256, 128, 64],
-            'activation': 'sigmoid',
-            'dropout': 0.2,
-            'optimizer': 'rmsprop',
-            'learning_rate': '0.0001',
-            'batch_size': 32,
-            'epochs': 10
-            }
+    # Experiment 13: My Design, My Architecture.
+    'my_custom2': {
+        'layers': [256, 128, 64],
+        'activation': 'sigmoid',
+        'dropout': 0.2,
+        'optimizer': 'rmsprop',
+        'learning_rate': 0.0001,
+        'batch_size': 32,
+        'epochs': 10
+   },
+
+   # Experiment 14: Very deep network (dangerous!)
+    'very_deep': {
+        'layers': [256, 128, 64, 32, 16],
+        'activation': 'relu',
+        'dropout': 0.3,
+        'optimizer': 'adam',
+        'learning_rate': 0.0005,
+        'batch_size': 32,
+        'epochs': 10
+    },
+
+    # Experiment 15: Very wide network (computationally expensive)
+    'very_wide': {
+        'layers': [1024, 512],
+        'activation': 'relu',
+        'dropout': 0.4,
+        'optimizer': 'adam',
+        'learning_rate': 0.0005,
+        'batch_size': 64,
+        'epochs': 10
+    },
+
+    # Experiment 16: Leaky ReLU (advanced activation)
+    'leaky_relu': {
+        'layers': [128, 64],
+        'activation': 'leaky_relu',
+        'dropout': 0.2,
+        'optimizer': 'adam',
+        'learning_rate': 0.001,
+        'batch_size': 32,
+        'epochs': 10
+    }
 }
 
 # ========================================
