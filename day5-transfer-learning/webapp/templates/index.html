@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐱🐶🐦🐟 AI Image Classifier</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 650px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .class-badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .badge.cat { background: #ffe0e0; color: #c0392b; }
+        .badge.dog { background: #e0f0ff; color: #2980b9; }
+        .badge.bird { background: #e0ffe0; color: #27ae60; }
+        .badge.fish { background: #e0f0f0; color: #1abc9c; }
+        
+        .upload-area {
+            border: 3px dashed #ddd;
+            border-radius: 16px;
+            padding: 40px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .upload-area:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .upload-area.dragover {
+            border-color: #667eea;
+            background: #e8ecff;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        
+        .upload-text {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .upload-btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            margin-top: 15px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-btn:hover {
+            background: #5a67d8;
+            transform: scale(1.05);
+        }
+        
+        #fileInput {
+            display: none;
+        }
+        
+        .result {
+            margin-top: 30px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .result.visible {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: 12px;
+            background: #f8f9ff;
+            margin-bottom: 15px;
+        }
+        
+        .result-prediction {
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            background: #f8f9ff;
+        }
+        
+        .prediction-emoji {
+            font-size: 52px;
+            display: block;
+        }
+        
+        .prediction-label {
+            font-size: 26px;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .prediction-confidence {
+            font-size: 16px;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        .confidence-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 1s ease;
+            border-radius: 4px;
+        }
+        
+        .all-predictions {
+            margin-top: 15px;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #eee;
+        }
+        
+        .all-predictions-title {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .prediction-row {
+            display: flex;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .prediction-row:last-child {
+            border-bottom: none;
+        }
+        
+        .prediction-row .class-icon {
+            font-size: 18px;
+            width: 30px;
+        }
+        
+        .prediction-row .class-name {
+            font-weight: 500;
+            width: 60px;
+            font-size: 14px;
+        }
+        
+        .prediction-row .class-bar {
+            flex: 1;
+            height: 6px;
+            background: #f0f0f0;
+            border-radius: 3px;
+            margin: 0 12px;
+            overflow: hidden;
+        }
+        
+        .prediction-row .class-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 1s ease;
+        }
+        
+        .prediction-row .class-percent {
+            font-size: 13px;
+            min-width: 50px;
+            text-align: right;
+            color: #666;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 30px;
+            display: none;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #bbb;
+            font-size: 12px;
+        }
+        
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            padding: 10px;
+            background: #fde8e8;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .error.visible {
+            display: block;
+        }
+
+        @media (max-width: 500px) {
+            .container { padding: 20px; }
+            .class-badges { gap: 6px; }
+            .badge { font-size: 12px; padding: 4px 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐱🐶🐦🐟 AI Classifier</h1>
+        <p class="subtitle">Upload a photo and AI will identify it!</p>
+        
+        <div class="class-badges">
+            <span class="badge cat">🐱 Cats</span>
+            <span class="badge dog">🐶 Dogs</span>
+            <span class="badge bird">🐦 Birds</span>
+            <span class="badge fish">🐟 Fish</span>
+        </div>
+        
+        <div class="upload-area" id="dropZone">
+            <div class="upload-icon">📸</div>
+            <div class="upload-text">
+                <strong>Drag & drop</strong> your image here<br>
+                or click to browse
+            </div>
+            <button class="upload-btn" id="uploadBtn">Choose Image</button>
+            <input type="file" id="fileInput" accept="image/*">
+        </div>
+        
+        <div class="error" id="errorMessage"></div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 15px; color: #666;">🧠 Analyzing your image...</p>
+        </div>
+        
+        <div class="result" id="result">
+            <img class="result-image" id="resultImage" alt="Uploaded image">
+            <div class="result-prediction">
+                <span class="prediction-emoji" id="predictionEmoji">🐱</span>
+                <div class="prediction-label" id="predictionLabel">Cat</div>
+                <div class="prediction-confidence" id="confidenceText">Confidence: 95.5%</div>
+                <div class="confidence-bar">
+                    <div class="confidence-fill" id="confidenceFill" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="all-predictions" id="allPredictions">
+                <div class="all-predictions-title">📊 All Predictions</div>
+                <div id="predictionList"></div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            Powered by TensorFlow 🧠 | Trained on 600+ images
+        </div>
+    </div>
+    
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const loading = document.getElementById('loading');
+        const result = document.getElementById('result');
+        const resultImage = document.getElementById('resultImage');
+        const predictionEmoji = document.getElementById('predictionEmoji');
+        const predictionLabel = document.getElementById('predictionLabel');
+        const confidenceText = document.getElementById('confidenceText');
+        const confidenceFill = document.getElementById('confidenceFill');
+        const predictionList = document.getElementById('predictionList');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        const emojis = {
+            'cats': '🐱',
+            'dogs': '🐶',
+            'birds': '🐦',
+            'fish': '🐟'
+        };
+        
+        const displayNames = {
+            'cats': 'Cat',
+            'dogs': 'Dog',
+            'birds': 'Bird',
+            'fish': 'Fish'
+        };
+        
+        const colors = {
+            'cats': '#e74c3c',
+            'dogs': '#3498db',
+            'birds': '#2ecc71',
+            'fish': '#1abc9c'
+        };
+        
+        uploadBtn.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('click', () => fileInput.click());
+        
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length > 0) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+        
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                showError('Please upload an image file!');
+                return;
+            }
+            
+            hideError();
+            result.classList.remove('visible');
+            loading.style.display = 'block';
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                loading.style.display = 'none';
+                
+                if (data.error) {
+                    showError(data.error);
+                    return;
+                }
+                
+                resultImage.src = data.image;
+                predictionEmoji.textContent = data.emoji || '❓';
+                predictionLabel.textContent = data.display_name || data.prediction;
+                confidenceText.textContent = `Confidence: ${data.confidence}`;
+                
+                const confidence = parseFloat(data.confidence);
+                confidenceFill.style.width = confidence + '%';
+                
+                if (data.all_predictions) {
+                    renderAllPredictions(data.all_predictions);
+                }
+                
+                result.classList.add('visible');
+            })
+            .catch(error => {
+                loading.style.display = 'none';
+                showError('Error: ' + error.message);
+            });
+        }
+        
+        function renderAllPredictions(predictions) {
+            predictionList.innerHTML = '';
+            
+            const sorted = Object.entries(predictions).sort((a, b) => b[1] - a[1]);
+            
+            sorted.forEach(([className, confidence]) => {
+                const row = document.createElement('div');
+                row.className = 'prediction-row';
+                
+                const displayName = displayNames[className] || className;
+                const emoji = emojis[className] || '❓';
+                const color = colors[className] || '#667eea';
+                
+                row.innerHTML = `
+                    <span class="class-icon">${emoji}</span>
+                    <span class="class-name">${displayName}</span>
+                    <div class="class-bar">
+                        <div class="class-bar-fill" style="width: ${confidence}%; background: ${color}"></div>
+                    </div>
+                    <span class="class-percent">${confidence.toFixed(1)}%</span>
+                `;
+                predictionList.appendChild(row);
+            });
+        }
+        
+        function showError(message) {
+            errorMessage.textContent = '❌ ' + message;
+            errorMessage.classList.add('visible');
+            setTimeout(() => {
+                errorMessage.classList.remove('visible');
+            }, 5000);
+        }
+        
+        function hideError() {
+            errorMessage.classList.remove('visible');
+        }
+    </script>
+</body>
+</html>
