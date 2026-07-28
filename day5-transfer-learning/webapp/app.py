@@ -9,8 +9,10 @@ from flask import Flask, request, render_template, jsonify
 from flask_cors import CORS
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
+from tensorflow.keras.applications.resnet50 import preprocess_input
 from werkzeug.utils import secure_filename
 import base64
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -33,7 +35,22 @@ print("📦 Loading AI model...")
 
 # Try to load the proper multi-class model
 model = None
-class_names = ['cats', 'dogs', 'birds', 'fish']
+class_names = ['cats', 'dogs', 'birds', 'fish']  # fallback only, overwritten below if possible
+
+# Keras assigns class indices ALPHABETICALLY by folder name during training
+# (birds=0, cats=1, dogs=2, fish=3) -- NOT in the order they're listed above.
+# Load the mapping saved by train_multi_proper.py so labels line up correctly.
+try:
+    with open('../class_indices.json', 'r') as f:
+        class_indices = json.load(f)  # e.g. {'birds':0, 'cats':1, 'dogs':2, 'fish':3}
+    ordered = [None] * len(class_indices)
+    for name, idx in class_indices.items():
+        ordered[idx] = name
+    class_names = ordered
+    print(f"✅ Loaded class order from class_indices.json: {class_names}")
+except Exception as e:
+    print(f"⚠️ class_indices.json not found, using default order (may be WRONG): {e}")
+
 emojis = {
     'cats': '🐱',
     'dogs': '🐶',
@@ -74,7 +91,7 @@ def predict_image_full(img_path):
     img = image.load_img(img_path, target_size=(224, 224))
     img_array = image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
-    img_array = img_array / 255.0
+    img_array = preprocess_input(img_array)  # must match training preprocessing (ResNet50), not /255.0
     
     predictions = model.predict(img_array, verbose=0)[0]
     predicted_class = np.argmax(predictions)
